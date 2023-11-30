@@ -61,4 +61,42 @@ module.exports = {
       res.status(500).json({ error: 'Internal server error' });
     }
   },
+
+  deleteFollowedCourse: async (req, res) => {
+    try {
+      const { courseId } = req.body;
+
+      // Check if the user information is attached to the request
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      const userId = req.user.id;
+
+      // Check if the user is following the course
+      const existingFollow = await followCourse.findOne({
+        where: {
+          user_id: userId,
+          course_id: courseId,
+        },
+      });
+
+      if (!existingFollow) {
+        return res.status(400).json({ message: 'User is not following the course' });
+      }
+
+      // Delete the entry in the followCourse table
+      await followCourse.destroy({
+        where: {
+          user_id: userId,
+          course_id: courseId,
+        },
+      });
+
+      res.status(200).json({ message: 'Successfully unfollowed the course' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
 };
