@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const { Sequelize } = require('sequelize');
 const config = require('./config/config');
+const cors = require('cors');
 
 const db = new Sequelize(config.development); // Use the 'development' configuration
 
