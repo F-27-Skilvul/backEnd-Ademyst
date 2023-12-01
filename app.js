@@ -32,7 +32,6 @@ async function testConnection() {
 testConnection();
 
 app.use(express.json());
-app.use(allRoutes);
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5173'); // Update with your actual frontend origin
@@ -40,6 +39,8 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
+
+app.use(allRoutes);
 
 app.listen(PORT, () => {
   console.log('Server running on port ' + PORT);
