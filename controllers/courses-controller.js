@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const { Courses, Topics, Lessons } = require('../models')
 
 module.exports = {
@@ -20,6 +23,7 @@ module.exports = {
           id: course.id,
           title: course.title,
           description: course.description,
+          image: course.image,
           totalTime: Math.round(countTopicsTime * 1.5),
           totalTopics: countTopics,
           topics: course.Topics,
@@ -38,11 +42,18 @@ module.exports = {
     try {
       const data = req.body;
       console.log(data);
+
+      const imageFolder = './images';
+      const imageFiles = fs.readdirSync(imageFolder);
+
+      const randomImage = imageFiles[Math.floor(Math.random() * imageFiles.length)];
+
       const course = await Courses.findAll();
 
       await Courses.create({
         description: data.description,
         title: data.title,
+        image: randomImage,
       })
       
       return res.json({

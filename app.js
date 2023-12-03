@@ -32,6 +32,8 @@ async function testConnection() {
 
 testConnection();
 
+app.use('/images', express.static('./images'));
+
 app.use(express.json());
 app.use(cors());
 app.use(allRoutes);
