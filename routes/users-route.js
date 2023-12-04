@@ -8,6 +8,6 @@ router.route('/')
   .get( auth.verifyAdmin, getAllUser)
 
 router.route('/:id')
-  .get( auth.verifyAdmin, getUserById)
+  .get( auth.verifyToken, getUserById)
 
 module.exports = router;

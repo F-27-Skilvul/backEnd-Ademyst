@@ -31,6 +31,7 @@ module.exports = {
       });
 
       response = await Promise.all(response);
+      res.setHeader('Content-Type', 'image/jpg')
       res.status(200).json(response);
     } catch (error) {
       console.error('Error fetching courses:', error);
@@ -72,6 +73,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const course = await Courses.findOne({ where: { id }, include: Topics });
+      res.setHeader('Content-Type', 'image/jpg')
       res.status(200).json(course);
     } catch (error) {
       res.status(500).json({

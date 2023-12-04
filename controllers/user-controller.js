@@ -19,7 +19,11 @@ module.exports = {
         
       return res.json({
         message: "anda berhasil login admin",
-        token
+        token,
+        admin: {
+          name: admin.name,
+          email: admin.email,
+        }
       });
     }
       return res.json({
@@ -41,7 +45,11 @@ module.exports = {
      })
       return res.json({
         message: "anda berhasil login",
-        token
+        token,
+        user: {
+          name: user.name,
+          email: user.email,
+        }
       });
     }
 
@@ -139,7 +147,12 @@ module.exports = {
         });
       }
 
-      res.status(200).json(user);
+      const userInfo = {
+        name: user.name,
+        email: user.email,
+      };
+
+      res.status(200).json(userInfo);
     } catch (error) {
       console.error(error);
       res.status(500).json({
