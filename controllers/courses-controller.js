@@ -31,7 +31,6 @@ module.exports = {
       });
 
       response = await Promise.all(response);
-      res.setHeader('Content-Type', 'image/jpg')
       res.status(200).json(response);
     } catch (error) {
       console.error('Error fetching courses:', error);
