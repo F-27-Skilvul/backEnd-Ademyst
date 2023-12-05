@@ -1,4 +1,4 @@
-const { followCourse, Courses } = require('../models');
+const { followCourse, Courses, Topics } = require('../models');
 
 module.exports = {
   addCourses: async (req, res) => {
@@ -48,21 +48,44 @@ module.exports = {
 
       const userId = req.user.id;
 
-      // Fetch followed courses along with titles only
+      // Fetch followed courses
       const followedCourses = await followCourse.findAll({
-        include: [{ model: Courses, as: 'course' }],
         where: { user_id: userId },
       });
 
-      // Extract only the titles
-      const courseTitles = followedCourses.map((course) => course.course ? course.course.title : null);
+      // Extract course IDs from followedCourses
+      const courseIds = followedCourses.map((followedCourse) => followedCourse.course_id);
 
-      res.status(200).json(courseTitles);
+      // Fetch courses along with their associated Topics
+      const coursesWithTopics = await Courses.findAll({
+        include: [
+          {
+            model: Topics,
+            attributes: ['title'],
+            where: { course_id: courseIds },
+            required: false, // Use left join to include courses with no topics
+          },
+        ],
+        where: { id: courseIds },
+      });
+
+      // Extract only the titles and calculate totalTopics
+      const coursesWithTotalTopics = coursesWithTopics.map((course) => {
+        const totalTopics = course.Topics ? course.Topics.length : 0;
+
+        return {
+          title: course.title,
+          totalTopics: totalTopics,
+        };
+      });
+
+      res.status(200).json(coursesWithTotalTopics);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal server error' });
     }
   },
+
 
   deleteFollowedCourse: async (req, res) => {
     try {
