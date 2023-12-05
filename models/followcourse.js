@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       
       followCourse.belongsTo(models.Users, { foreignKey: 'user_id' });
-      followCourse.belongsTo(models.Courses, { foreignKey: 'course_id' });
+      followCourse.belongsTo(models.Courses, { foreignKey: 'course_id', as: 'course' });
     
     }
   }

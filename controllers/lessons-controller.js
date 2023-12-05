@@ -61,7 +61,7 @@ module.exports = {
   editLessonById: async (req, res) => {
     try {
       const { id } = req.params;
-      const { name, time } = req.body;
+      const { name, time, topic_id } = req.body;
 
       // Check if the specified lesson exists
       const existingLesson = await Lessons.findByPk(id);
@@ -72,6 +72,7 @@ module.exports = {
       // Update the lesson
       existingLesson.name = name;
       existingLesson.time = time;
+      existingLesson.topic_id = topic_id;
       await existingLesson.save();
 
       res.status(200).json({ lesson: existingLesson });
