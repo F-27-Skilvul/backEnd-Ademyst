@@ -54,8 +54,9 @@ module.exports = {
       });
 
       // Extract course IDs from followedCourses
+      console.log(followedCourses);
       const courseIds = followedCourses.map((followedCourse) => followedCourse.course_id);
-
+      console.log(courseIds);
       // Fetch courses along with their associated Topics
       const coursesWithTopics = await Courses.findAll({
         include: [
@@ -63,7 +64,7 @@ module.exports = {
             model: Topics,
             attributes: ['title'],
             where: { course_id: courseIds },
-            required: false, // Use left join to include courses with no topics
+            required: false,
           },
         ],
         where: { id: courseIds },
@@ -74,6 +75,7 @@ module.exports = {
         const totalTopics = course.Topics ? course.Topics.length : 0;
 
         return {
+          id: course.id,
           title: course.title,
           totalTopics: totalTopics,
         };
